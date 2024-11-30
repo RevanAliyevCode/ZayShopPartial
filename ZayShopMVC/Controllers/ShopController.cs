@@ -20,6 +20,7 @@ namespace ZayShopMVC.Controllers
 
             List<CategoryVM> categories = _context.Categories.Select(x => new CategoryVM
             {
+                Id = x.Id,
                 Name = x.Name
             }).ToList();
 
@@ -37,6 +38,29 @@ namespace ZayShopMVC.Controllers
             model.Products = products;
 
             return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult GetProductsByCategory(int categoryId)
+        {
+            var productsQuery = _context.Products.Include(p => p.Sizes).AsQueryable();
+
+            if (categoryId != 0)
+            {
+                productsQuery = productsQuery.Where(x => x.CategoryId == categoryId);
+            }
+
+            List<ProductVM> products = productsQuery.Select(x => new ProductVM
+            {
+                Name = x.Name,
+                Price = x.Price,
+                ImageName = x.ImageName,
+                Rating = x.Rating,
+                Sizes = x.Sizes.Select(s => s.Name).ToList()
+            }).ToList();
+
+
+            return PartialView("_ProductPartial", products);
         }
 
     }
