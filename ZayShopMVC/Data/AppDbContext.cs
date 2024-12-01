@@ -10,6 +10,7 @@ public class AppDbContext : DbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<Size> Sizes { get; set; }
     public DbSet<Slider> Sliders { get; set; }
+    public DbSet<OurBrands> OurBrands { get; set; }
 
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
